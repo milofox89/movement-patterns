@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movement Patterns - Complete Muscle Coverage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --squat-color: #FF6B35;
+            --hinge-color: #F7931E;
+            --push-color: #4ECDC4;
+            --pull-color: #95E1D3;
+            --bg-dark: #1a1a1a;
+            --bg-darker: #0f0f0f;
+            --text-light: #f5f5f5;
+            --text-dim: #a0a0a0;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--squat-color), var(--hinge-color), var(--push-color), var(--pull-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .movement-patterns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .pattern-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out backwards;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .pattern-card::after {
+            content: '→';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--pattern-color);
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-card:hover::after,
+        .pattern-card.active::after {
+            opacity: 1;
+            right: 0.75rem;
+        }
+
+        .pattern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--pattern-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .pattern-card:hover::before,
+        .pattern-card.active::before {
+            transform: scaleX(1);
+        }
+
+        .pattern-card:hover,
+        .pattern-card.active {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--pattern-color);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 20px var(--pattern-color);
+        }
+
+        .pattern-card:active {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .pattern-card:nth-child(1) { --pattern-color: var(--squat-color); animation-delay: 0.1s; }
+        .pattern-card:nth-child(2) { --pattern-color: var(--hinge-color); animation-delay: 0.2s; }
+        .pattern-card:nth-child(3) { --pattern-color: var(--push-color); animation-delay: 0.3s; }
+        .pattern-card:nth-child(4) { --pattern-color: var(--pull-color); animation-delay: 0.4s; }
+
+        .pattern-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--pattern-color);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.02em;
+        }
+
+        .pattern-examples {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .muscle-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .muscle-tag {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .pattern-card:hover .muscle-tag,
+        .pattern-card.active .muscle-tag {
+            background: var(--pattern-color);
+            color: var(--bg-dark);
+            border-color: var(--pattern-color);
+        }
+
+        .body-diagram {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInUp 0.6s ease-out 0.2s backwards;
+        }
+
+        .body-diagram h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .body-visual {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1/2;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .muscle-group {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.15;
+            filter: brightness(0.6);
+        }
+
+        .muscle-group.active {
+            opacity: 1;
+            filter: brightness(1.3) drop-shadow(0 0 8px currentColor);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                filter: brightness(1.3) drop-shadow(0 0 8px currentColor);
+            }
+            50% {
+                filter: brightness(1.5) drop-shadow(0 0 12px currentColor);
+            }
+        }
+
+        .coverage-summary {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(149, 225, 211, 0.1));
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out 0.5s backwards;
+        }
+
+        .coverage-summary h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .coverage-summary p {
+            font-size: 1.125rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .instruction {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.6s ease-out 0.6s backwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .exercise-panel {
+            position: fixed;
+            right: -450px;
+            top: 0;
+            width: 450px;
+            height: 100vh;
+            background: var(--bg-dark);
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .exercise-panel.active {
+            right: 0;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--panel-color);
+        }
+
+        .panel-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            color: var(--panel-color);
+            letter-spacing: 0.02em;
+        }
+
+        .close-btn {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .close-btn:active {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.95);
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--panel-color);
+            color: var(--panel-color);
+            transform: rotate(90deg);
+        }
+
+        .exercise-category {
+            margin-bottom: 2rem;
+        }
+
+        .category-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+            border-left: 3px solid var(--panel-color);
+        }
+
+        .exercise-list {
+            list-style: none;
+        }
+
+        .exercise-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--panel-color);
+            transform: translateX(8px);
+        }
+
+        .exercise-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-light);
+        }
+
+        .exercise-note {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        @media (max-width: 768px) {
+            .movement-patterns {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .exercise-panel {
+                width: 100%;
+                right: -100%;
+                padding: 1.5rem;
+            }
+
+            .panel-title {
+                font-size: 1.5rem;
+            }
+
+            .close-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 2rem;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .instruction {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>THE FOUR MOVEMENT PATTERNS</h1>
+            <p class="subtitle">Complete Muscle Coverage Through Smart Training</p>
+        </header>
+
+        <p class="instruction">Tap any movement pattern to see targeted muscles and view exercise list</p>
+
+        <div class="main-grid">
+            <div class="movement-patterns">
+                <div class="pattern-card" data-pattern="squat">
+                    <h3 class="pattern-title">SQUAT</h3>
+                    <p class="pattern-examples">Barbell Squat, Goblet Squat, Lunges</p>
+                    <div class="muscle-tags">
+                        <span class="muscle-tag">Quads</span>
+                        <span class="muscle-tag">Glutes</span>
+                        <span class="muscle-tag">Hamstrings</span>
+                        <span class="muscle-tag">Core</span>
+                        <span class="muscle-tag">Calves</span>
+                    </div>
+                </div>
+
+                <div class="pattern-card" data-pattern="hinge">
+                    <h3 class="pattern-title">HINGE</h3>
+                    <p class="pattern-examples">Deadlift, Romanian Deadlift, Hip Thrusts</p>
+                    <div class="muscle-tags">
+                        <span class="muscle-tag">Hamstrings</span>
+                        <span class="muscle-tag">Glutes</span>
+                        <span class="muscle-tag">Lower Back</span>
+                        <span class="muscle-tag">Core</span>
+                        <span class="muscle-tag">Traps</span>
+                    </div>
+                </div>
+
+                <div class="pattern-card" data-pattern="push">
+                    <h3 class="pattern-title">PUSH</h3>
+                    <p class="pattern-examples">Bench Press, Shoulder Press, Dips</p>
+                    <div class="muscle-tags">
+                        <span class="muscle-tag">Chest</span>
+                        <span class="muscle-tag">Shoulders</span>
+                        <span class="muscle-tag">Triceps</span>
+                        <span class="muscle-tag">Core</span>
+                    </div>
+                </div>
+
+                <div class="pattern-card" data-pattern="pull">
+                    <h3 class="pattern-title">PULL</h3>
+                    <p class="pattern-examples">Pull-ups, Rows, Face Pulls</p>
+                    <div class="muscle-tags">
+                        <span class="muscle-tag">Back</span>
+                        <span class="muscle-tag">Biceps</span>
+                        <span class="muscle-tag">Rear Delts</span>
+                        <span class="muscle-tag">Forearms</span>
+                        <span class="muscle-tag">Core</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="body-diagram">
+                <h2>Muscle Activation Map</h2>
+                <div class="body-visual">
+                    <svg viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Head -->
+                        <circle cx="100" cy="30" r="20" fill="rgba(255,255,255,0.1)"/>
+                        
+                        <!-- Neck -->
+                        <rect x="90" y="50" width="20" height="15" fill="rgba(255,255,255,0.1)"/>
+                        
+                        <!-- Shoulders -->
+                        <g class="muscle-group" data-muscles="push">
+                            <ellipse cx="70" cy="75" rx="18" ry="12" fill="var(--push-color)"/>
+                            <ellipse cx="130" cy="75" rx="18" ry="12" fill="var(--push-color)"/>
+                        </g>
+                        
+                        <!-- Chest -->
+                        <g class="muscle-group" data-muscles="push">
+                            <path d="M 70 80 Q 100 75 130 80 L 130 110 Q 100 115 70 110 Z" fill="var(--push-color)"/>
+                        </g>
+                        
+                        <!-- Core -->
+                        <g class="muscle-group" data-muscles="squat hinge push pull">
+                            <rect x="75" y="110" width="50" height="60" rx="5" fill="rgba(255,200,100,0.6)"/>
+                        </g>
+                        
+                        <!-- Upper Back -->
+                        <g class="muscle-group" data-muscles="pull hinge">
+                            <ellipse cx="100" cy="90" rx="35" ry="25" fill="var(--pull-color)" opacity="0.7"/>
+                        </g>
+                        
+                        <!-- Lower Back -->
+                        <g class="muscle-group" data-muscles="hinge">
+                            <rect x="85" y="135" width="30" height="35" rx="3" fill="var(--hinge-color)"/>
+                        </g>
+                        
+                        <!-- Triceps -->
+                        <g class="muscle-group" data-muscles="push">
+                            <ellipse cx="52" cy="100" rx="8" ry="25" fill="var(--push-color)"/>
+                            <ellipse cx="148" cy="100" rx="8" ry="25" fill="var(--push-color)"/>
+                        </g>
+                        
+                        <!-- Biceps -->
+                        <g class="muscle-group" data-muscles="pull">
+                            <ellipse cx="60" cy="95" rx="6" ry="20" fill="var(--pull-color)"/>
+                            <ellipse cx="140" cy="95" rx="6" ry="20" fill="var(--pull-color)"/>
+                        </g>
+                        
+                        <!-- Forearms -->
+                        <g class="muscle-group" data-muscles="pull">
+                            <rect x="52" y="120" width="8" height="30" rx="4" fill="var(--pull-color)"/>
+                            <rect x="140" y="120" width="8" height="30" rx="4" fill="var(--pull-color)"/>
+                        </g>
+                        
+                        <!-- Glutes -->
+                        <g class="muscle-group" data-muscles="squat hinge">
+                            <ellipse cx="85" cy="185" rx="18" ry="15" fill="var(--squat-color)"/>
+                            <ellipse cx="115" cy="185" rx="18" ry="15" fill="var(--squat-color)"/>
+                        </g>
+                        
+                        <!-- Hamstrings -->
+                        <g class="muscle-group" data-muscles="squat hinge">
+                            <rect x="75" y="200" width="15" height="70" rx="7" fill="var(--hinge-color)"/>
+                            <rect x="110" y="200" width="15" height="70" rx="7" fill="var(--hinge-color)"/>
+                        </g>
+                        
+                        <!-- Quads -->
+                        <g class="muscle-group" data-muscles="squat">
+                            <rect x="70" y="170" width="18" height="80" rx="9" fill="var(--squat-color)"/>
+                            <rect x="112" y="170" width="18" height="80" rx="9" fill="var(--squat-color)"/>
+                        </g>
+                        
+                        <!-- Calves -->
+                        <g class="muscle-group" data-muscles="squat">
+                            <ellipse cx="78" cy="310" rx="10" ry="30" fill="var(--squat-color)"/>
+                            <ellipse cx="122" cy="310" rx="10" ry="30" fill="var(--squat-color)"/>
+                        </g>
+                        
+                        <!-- Traps -->
+                        <g class="muscle-group" data-muscles="pull hinge">
+                            <path d="M 85 65 L 75 80 L 85 75 Z" fill="var(--pull-color)"/>
+                            <path d="M 115 65 L 125 80 L 115 75 Z" fill="var(--pull-color)"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--squat-color);"></div>
+                        <span>Squat</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--hinge-color);"></div>
+                        <span>Hinge</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--push-color);"></div>
+                        <span>Push</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--pull-color);"></div>
+                        <span>Pull</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="coverage-summary">
+            <h2>COMPLETE COVERAGE</h2>
+            <p>
+                By incorporating all four movement patterns into your training program, you ensure balanced development 
+                of every major muscle group. This approach prevents muscular imbalances, reduces injury risk, and creates 
+                a comprehensive foundation for functional strength and athletic performance.
+            </p>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+    
+    <div class="exercise-panel">
+        <div class="panel-header">
+            <h2 class="panel-title" id="panelTitle">EXERCISES</h2>
+            <button class="close-btn" id="closePanel">×</button>
+        </div>
+        <div id="exerciseContent"></div>
+    </div>
+
+    <script>
+        const patternCards = document.querySelectorAll('.pattern-card');
+        const muscleGroups = document.querySelectorAll('.muscle-group');
+        const exercisePanel = document.querySelector('.exercise-panel');
+        const overlay = document.querySelector('.overlay');
+        const closeBtn = document.getElementById('closePanel');
+        const panelTitle = document.getElementById('panelTitle');
+        const exerciseContent = document.getElementById('exerciseContent');
+
+        const exercises = {
+            squat: {
+                color: 'var(--squat-color)',
+                title: 'SQUAT EXERCISES',
+                categories: [
+                    {
+                        name: 'Barbell Variations',
+                        exercises: [
+                            { name: 'Back Squat', note: 'King of leg exercises' },
+                            { name: 'Front Squat', note: 'More quad emphasis, upright torso' },
+                            { name: 'Overhead Squat', note: 'Full body coordination and mobility' },
+                            { name: 'Box Squat', note: 'Great for beginners and power development' },
+                            { name: 'Pause Squat', note: 'Builds strength at bottom position' }
+                        ]
+                    },
+                    {
+                        name: 'Dumbbell & Kettlebell',
+                        exercises: [
+                            { name: 'Goblet Squat', note: 'Perfect for learning squat mechanics' },
+                            { name: 'Dumbbell Front Squat', note: 'Easier on shoulders than barbell' },
+                            { name: 'Kettlebell Squat', note: 'Great for high rep work' },
+                            { name: 'Dumbbell Sumo Squat', note: 'Targets inner thighs and glutes' }
+                        ]
+                    },
+                    {
+                        name: 'Single Leg & Lunges',
+                        exercises: [
+                            { name: 'Bulgarian Split Squat', note: 'Excellent for quad development' },
+                            { name: 'Walking Lunges', note: 'Dynamic and functional' },
+                            { name: 'Reverse Lunges', note: 'Easier on knees' },
+                            { name: 'Lateral Lunges', note: 'Hits adductors and abductors' },
+                            { name: 'Pistol Squats', note: 'Advanced bodyweight challenge' }
+                        ]
+                    },
+                    {
+                        name: 'Machine & Bodyweight',
+                        exercises: [
+                            { name: 'Leg Press', note: 'High load, lower back support' },
+                            { name: 'Hack Squat', note: 'Machine variation for quads' },
+                            { name: 'Sissy Squat', note: 'Intense quad isolation' },
+                            { name: 'Air Squat', note: 'Perfect for warm-ups and high reps' },
+                            { name: 'Jump Squat', note: 'Power and explosiveness' }
+                        ]
+                    }
+                ]
+            },
+            hinge: {
+                color: 'var(--hinge-color)',
+                title: 'HINGE EXERCISES',
+                categories: [
+                    {
+                        name: 'Deadlift Variations',
+                        exercises: [
+                            { name: 'Conventional Deadlift', note: 'The king of posterior chain' },
+                            { name: 'Sumo Deadlift', note: 'More quad involvement, upright torso' },
+                            { name: 'Romanian Deadlift (RDL)', note: 'Hamstring and glute focus' },
+                            { name: 'Stiff-Leg Deadlift', note: 'Maximum hamstring stretch' },
+                            { name: 'Deficit Deadlift', note: 'Increased range of motion' },
+                            { name: 'Trap Bar Deadlift', note: 'More quad dominant, easier on back' }
+                        ]
+                    },
+                    {
+                        name: 'Hip Thrust & Bridge',
+                        exercises: [
+                            { name: 'Barbell Hip Thrust', note: 'Best glute builder' },
+                            { name: 'Single Leg Hip Thrust', note: 'Unilateral glute strength' },
+                            { name: 'Glute Bridge', note: 'Great for beginners' },
+                            { name: 'Elevated Glute Bridge', note: 'Increased range of motion' },
+                            { name: 'Frog Pump', note: 'Glute activation and burnout' }
+                        ]
+                    },
+                    {
+                        name: 'Swings & Dynamic',
+                        exercises: [
+                            { name: 'Kettlebell Swing', note: 'Power and conditioning' },
+                            { name: 'Dumbbell Swing', note: 'Alternative to kettlebell' },
+                            { name: 'Single Arm Swing', note: 'Anti-rotation core work' },
+                            { name: 'Good Morning', note: 'Lower back and hamstring strength' }
+                        ]
+                    },
+                    {
+                        name: 'Single Leg & Accessories',
+                        exercises: [
+                            { name: 'Single Leg RDL', note: 'Balance and unilateral strength' },
+                            { name: 'Nordic Curl', note: 'Extreme hamstring eccentric' },
+                            { name: 'Back Extension', note: 'Lower back and glute isolation' },
+                            { name: 'Reverse Hyper', note: 'Low back health and glute strength' },
+                            { name: 'Pull Through', note: 'Cable hip hinge variation' }
+                        ]
+                    }
+                ]
+            },
+            push: {
+                color: 'var(--push-color)',
+                title: 'PUSH EXERCISES',
+                categories: [
+                    {
+                        name: 'Horizontal Press (Chest)',
+                        exercises: [
+                            { name: 'Barbell Bench Press', note: 'Classic chest builder' },
+                            { name: 'Incline Bench Press', note: 'Upper chest emphasis' },
+                            { name: 'Decline Bench Press', note: 'Lower chest focus' },
+                            { name: 'Dumbbell Bench Press', note: 'Greater range of motion' },
+                            { name: 'Dumbbell Flyes', note: 'Chest stretch and isolation' },
+                            { name: 'Push-Ups', note: 'Bodyweight fundamental' },
+                            { name: 'Chest Dips', note: 'Lower chest and triceps' }
+                        ]
+                    },
+                    {
+                        name: 'Vertical Press (Shoulders)',
+                        exercises: [
+                            { name: 'Overhead Press (OHP)', note: 'Standing barbell shoulder press' },
+                            { name: 'Seated Barbell Press', note: 'More stability, focus on delts' },
+                            { name: 'Dumbbell Shoulder Press', note: 'Natural arm path' },
+                            { name: 'Arnold Press', note: 'Full delt rotation' },
+                            { name: 'Landmine Press', note: 'Shoulder-friendly angle' },
+                            { name: 'Pike Push-Up', note: 'Bodyweight shoulder press' },
+                            { name: 'Handstand Push-Up', note: 'Advanced vertical press' }
+                        ]
+                    },
+                    {
+                        name: 'Shoulder Accessories',
+                        exercises: [
+                            { name: 'Lateral Raise', note: 'Side delt isolation' },
+                            { name: 'Front Raise', note: 'Front delt focus' },
+                            { name: 'Overhead Press Machine', note: 'Stable shoulder pressing' },
+                            { name: 'Cable Crossover', note: 'Constant tension on chest' }
+                        ]
+                    },
+                    {
+                        name: 'Triceps Focus',
+                        exercises: [
+                            { name: 'Close Grip Bench Press', note: 'Compound tricep builder' },
+                            { name: 'Tricep Dips', note: 'Bodyweight tricep mass' },
+                            { name: 'Overhead Tricep Extension', note: 'Long head emphasis' },
+                            { name: 'Skull Crushers', note: 'Classic tricep isolation' },
+                            { name: 'Tricep Pushdown', note: 'Cable isolation work' },
+                            { name: 'Diamond Push-Ups', note: 'Bodyweight tricep focus' }
+                        ]
+                    }
+                ]
+            },
+            pull: {
+                color: 'var(--pull-color)',
+                title: 'PULL EXERCISES',
+                categories: [
+                    {
+                        name: 'Vertical Pull (Back Width)',
+                        exercises: [
+                            { name: 'Pull-Ups', note: 'King of back exercises' },
+                            { name: 'Chin-Ups', note: 'More bicep involvement' },
+                            { name: 'Lat Pulldown', note: 'Assisted vertical pull' },
+                            { name: 'Assisted Pull-Up', note: 'Build to full pull-up' },
+                            { name: 'Wide Grip Pull-Up', note: 'Maximum lat width' },
+                            { name: 'Neutral Grip Pull-Up', note: 'Easier on shoulders' }
+                        ]
+                    },
+                    {
+                        name: 'Horizontal Pull (Back Thickness)',
+                        exercises: [
+                            { name: 'Barbell Row', note: 'Mass builder for back' },
+                            { name: 'Pendlay Row', note: 'Dead stop power rows' },
+                            { name: 'Dumbbell Row', note: 'Unilateral back development' },
+                            { name: 'Chest Supported Row', note: 'Removes lower back fatigue' },
+                            { name: 'Seated Cable Row', note: 'Constant tension' },
+                            { name: 'Inverted Row', note: 'Bodyweight horizontal pull' },
+                            { name: 'T-Bar Row', note: 'Mid-back thickness' }
+                        ]
+                    },
+                    {
+                        name: 'Rear Delt & Upper Back',
+                        exercises: [
+                            { name: 'Face Pull', note: 'Shoulder health and rear delts' },
+                            { name: 'Reverse Flye', note: 'Rear delt isolation' },
+                            { name: 'Band Pull-Apart', note: 'Upper back activation' },
+                            { name: 'Rear Delt Row', note: 'High row for rear delts' },
+                            { name: 'Shrugs', note: 'Trap development' }
+                        ]
+                    },
+                    {
+                        name: 'Biceps & Forearms',
+                        exercises: [
+                            { name: 'Barbell Curl', note: 'Classic bicep builder' },
+                            { name: 'Hammer Curl', note: 'Brachialis and forearm' },
+                            { name: 'Incline Dumbbell Curl', note: 'Long head stretch' },
+                            { name: 'Preacher Curl', note: 'Bicep isolation' },
+                            { name: 'Cable Curl', note: 'Constant tension' },
+                            { name: 'Farmer\'s Walk', note: 'Grip and forearm strength' },
+                            { name: 'Dead Hang', note: 'Grip endurance' }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        function resetMuscles() {
+            muscleGroups.forEach(group => {
+                group.classList.remove('active');
+            });
+            patternCards.forEach(card => {
+                card.classList.remove('active');
+            });
+        }
+
+        function activatePattern(pattern) {
+            resetMuscles();
+            const card = document.querySelector(`[data-pattern="${pattern}"]`);
+            if (card) {
+                card.classList.add('active');
+            }
+            
+            muscleGroups.forEach(group => {
+                const muscles = group.getAttribute('data-muscles');
+                if (muscles && muscles.includes(pattern)) {
+                    group.classList.add('active');
+                }
+            });
+        }
+
+        function openExercisePanel(pattern) {
+            const data = exercises[pattern];
+            exercisePanel.style.setProperty('--panel-color', data.color);
+            panelTitle.textContent = data.title;
+            
+            let html = '';
+            data.categories.forEach(category => {
+                html += `
+                    <div class="exercise-category">
+                        <h3 class="category-title">${category.name}</h3>
+                        <ul class="exercise-list">
+                `;
+                category.exercises.forEach(exercise => {
+                    html += `
+                        <li class="exercise-item">
+                            <div class="exercise-name">${exercise.name}</div>
+                            <div class="exercise-note">${exercise.note}</div>
+                        </li>
+                    `;
+                });
+                html += `
+                        </ul>
+                    </div>
+                `;
+            });
+            
+            exerciseContent.innerHTML = html;
+            exercisePanel.classList.add('active');
+            overlay.classList.add('active');
+        }
+
+        function closeExercisePanel() {
+            exercisePanel.classList.remove('active');
+            overlay.classList.remove('active');
+            resetMuscles();
+        }
+
+        // Detect if device is touch-enabled
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+        patternCards.forEach(card => {
+            if (!isTouchDevice) {
+                // Desktop: hover to highlight, click to open panel
+                card.addEventListener('mouseenter', () => {
+                    const pattern = card.getAttribute('data-pattern');
+                    activatePattern(pattern);
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    if (!exercisePanel.classList.contains('active')) {
+                        resetMuscles();
+                    }
+                });
+            }
+
+            // Touch and click events for all devices
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pattern = card.getAttribute('data-pattern');
+                activatePattern(pattern);
+                openExercisePanel(pattern);
+            });
+
+            // Prevent double-tap zoom on mobile
+            card.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                const pattern = card.getAttribute('data-pattern');
+                activatePattern(pattern);
+                openExercisePanel(pattern);
+            });
+        });
+
+        closeBtn.addEventListener('click', closeExercisePanel);
+        closeBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            closeExercisePanel();
+        });
+        
+        overlay.addEventListener('click', closeExercisePanel);
+        overlay.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            closeExercisePanel();
+        });
+
+        // Muscles remain dimmed until user hovers over a pattern
+    </script>
+</body>
+</html>
