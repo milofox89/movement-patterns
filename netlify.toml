@@ -1,0 +1,16 @@
+# Netlify Configuration File
+# Save this as: netlify.toml (in root of your repository)
+
+[build]
+  # Specify the functions directory
+  functions = "netlify/functions"
+
+[functions]
+  # Use esbuild for faster builds
+  node_bundler = "esbuild"
+
+# Redirect rules (optional)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
